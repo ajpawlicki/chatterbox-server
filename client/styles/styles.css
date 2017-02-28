@@ -59,6 +59,10 @@ form input[type=text] {
     padding: 5px;
 }
 
+.newChat {
+    display: none;
+}
+
 .chat {
     padding: 5px;
     margin-bottom: 5px;
@@ -85,6 +89,11 @@ form input[type=text] {
 
 .friend {
     color: #fff;
-    background-color: #0090da;
+    background-color: red;
+    font-weight: bold;
+}
+
+.friendContainer {
+    display: none;
 }
 

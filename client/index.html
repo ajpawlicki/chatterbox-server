@@ -7,6 +7,8 @@
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="scripts/jquery.timeago.js"</script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -19,29 +21,29 @@
       }
     </script>
     <!-- your scripts -->
-    <script src="env/config.js"></script>
+<!--     <script src="env/config.js"></script> -->
     <script src="scripts/app.js"></script>
   </head>
   <body>
     <div id="main">
       <h1>chatterbox</h1>
+      <div class="friendContainer"></div>
       <!-- Your HTML goes here! -->
-
-      <div class="spinner"><img src="images/spiffygif_46x46.gif"></div>
-      <div id="rooms">
-        Room:
-        <select id="roomSelect">
-        </select>
-      </div>
-      <form action="#" id="send" method="post">
-        <input type="text" name="message" id="message"/>
-        <input type="submit" name="submit" class="submit"/>
-      </form>    </div>
+      <!-- <input type="submit" id="send" class="submit" value="Submit"> -->
+      <select id="roomSelect" name="chatroom">
+        <option value="New Room...">New Room...</option>
+        <option value="All Room" selected>All Room</option>
+        <option value="Restroom">Restroom</option>
+      </select>
+      <br>
+<!--       <input type="text" id="message" name="textmessage">
+      <input type="button" id="send" class="submit">Submit</input> -->
+    <form action="#" id="send" method="post">
+      <span class="newChat">New Chatroom: <input type="text" name="newRoom" id="newRoom"/></span>
+      Message: <input type="text" name="message" id="message"/>
+      <input type="submit" name="submit" class="submit"/>
+    </form>
+    </div>
     <div id="chats"></div>
-
-    <script>
-      $(function(){
-        app.init()
-      });
-    </script>  </body>
+  </body>
 </html>
