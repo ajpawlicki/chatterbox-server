@@ -63,10 +63,8 @@ var requestHandler = function(request, response) {
     request.on('data', function(chunk) {
       chunk = JSON.parse(chunk);
       results.push(chunk);
-      console.log('chunk', chunk);
     });
     request.on('end', function() {
-      console.log('i ended');
       response.end();
     });
     // response.end();

@@ -96,7 +96,6 @@ describe('Node Server Request Listener Function', function() {
     expect(res._responseCode).to.equal(200);
     var messages = JSON.parse(res._data).results;
     expect(messages.length).to.be.above(0);
-    console.log('spec messages', messages);
     expect(messages[0].username).to.equal('Jono');
     expect(messages[0].message).to.equal('Do my bidding!');
     expect(res._ended).to.equal(true);
@@ -117,4 +116,50 @@ describe('Node Server Request Listener Function', function() {
       });
   });
 
+  describe('Tests that we made', function() {
+    it('should have all messages in sequence at which they are created', function() {
+      var stubMsg = {
+        username: 'Jono',
+        message: 'Do my bidding!'
+      };
+      var stubMsg2 = {
+        username: 'Hono',
+        message: 'Do my bedding!'
+      };
+      var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+      var res = new stubs.response();
+      handler.requestHandler(req, res);
+
+      var req2 = new stubs.request('/classes/messages', 'POST', stubMsg2);
+      var res2 = new stubs.response();
+      handler.requestHandler(req2, res2);
+
+      var req3 = new stubs.request('/classes/messages', 'GET');
+      var res3 = new stubs.response();
+
+      handler.requestHandler(req3, res3);
+
+      var messages = JSON.parse(res3._data).results;
+      expect(messages[2].message).to.equal('Do my bidding!');
+      expect(messages[3].message).to.equal('Do my bedding!');    
+      // console.log(messages[1]);
+    });  
+
+    it('should have a roomname in message object', function() {
+      var stubMsg = {
+        username: 'Jono',
+        message: 'Do my bidding!',
+        roomname: 'restroom'
+      };      
+      var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+      var res = new stubs.response();
+      handler.requestHandler(req, res);
+      var req3 = new stubs.request('/classes/messages', 'GET');
+      var res3 = new stubs.response();
+      handler.requestHandler(req3, res3);
+      var messages = JSON.parse(res3._data).results;
+      expect(messages[4].roomname).to.equal('restroom');            
+    });
+
+  });
 });
