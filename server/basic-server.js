@@ -1,6 +1,13 @@
 /* Import node's http module: */
 var http = require('http');
 var handleRequest = require('./request-handler.js');
+var underscore = require('../node_modules/underscore/underscore.js');
+var request = require('../node_modules/request/request.js');
+
+// var filesys = require('fs');
+// var url = require('url');
+// var path = require('path');
+
 
 
 // Every server needs to listen on a port with a unique number. The
@@ -15,8 +22,6 @@ var port = 3000;
 // special address that always refers to localhost.
 var ip = '127.0.0.1';
 
-
-
 // We use node's http module to create a server.
 //
 // The function we pass to http.createServer will be used to handle all
@@ -26,6 +31,14 @@ var ip = '127.0.0.1';
 var server = http.createServer(handleRequest.requestHandler);
 console.log('Listening on http://' + ip + ':' + port);
 server.listen(port, ip);
+
+//Use this for event listener
+//var server = http.createServer();
+//server.on('request', handleRequest.requestHandler);
+
+
+
+
 
 // To start this server, run:
 //

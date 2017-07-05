@@ -11,6 +11,7 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+var results = [];
 
 var headers = {
   'access-control-allow-origin': '*',
@@ -40,42 +41,81 @@ module.exports.requestHandler = function(request, response) {
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   // The outgoing status.
-  var statusCode = 200;
+  var statusCode;
 
-  
+  // See the note below about CORS headers.
+  var headers = defaultCorsHeaders;
+  headers['Content-Type'] = 'application/json';
+
+  if (request.method === 'GET') {
+    statusCode = 200;
+    if (!request.url.includes('/classes/')) {
+      statusCode = 404;
+    }
+    response.writeHead(statusCode, headers);
+    response.end(JSON.stringify({results: results}));    
+  }
+  if (request.method === 'OPTIONS') {
+    statusCode = 202;
+    if (!request.url.includes('/classes/')) {
+      statusCode = 404;
+    }
+    response.writeHead(statusCode, headers);
+    response.end();
+  }
+  if (request.method === 'POST') {
+    statusCode = 201;
+    if (!request.url.includes('/classes/')) {
+      statusCode = 404;
+    }    
+    // results.push(request._postData);
+    response.writeHead(statusCode, headers);
+    request.on('data', function(chunk) {
+      chunk = JSON.parse(chunk);
+      results.push(chunk);
+    });
+    request.on('end', function() {
+      response.end();
+    });
+    // response.end();
+  }
+
   // Tell the client we are sending them plain text.
-  //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  
+  // response.writeHeader(200, {'Content-Type': 'text.plain'});  <---Static???
+
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
   // up in the browser.
+  // response.write(JSON.stringify({results: []}));
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  if (request.method === 'GET') {
-    response.writeHead(statusCode, headers);
-    response.end(JSON.stringify({results: results}));
-  }
+  
+  // wrote this on my own
+  // if (request.method === 'GET') {
+  //   response.writeHead(statusCode, headers);
+  //   response.end(JSON.stringify({results: results}));
+  // }
 
-  if (request.method === 'POST') {
-    var data = '';
-    request.on('data', function(chunk) {
-      data += chunk;
-    });
+  // if (request.method === 'POST') {
+  //   var data = '';
+  //   request.on('data', function(chunk) {
+  //     data += chunk;
+  //   });
 
-    request.on('end', function(err, results) {
-      results.push(JSON.parse(data));
-      response.writeHead(statusCode, headers);
-      // response.end();
-    });
+  //   request.on('end', function(err, results) {
+  //     results.push(JSON.parse(data));
+  //     response.writeHead(statusCode, headers);
+  //     // response.end();
+  //   });
 
-  }
+  // }
+
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
@@ -88,4 +128,9 @@ module.exports.requestHandler = function(request, response) {
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
 
+<<<<<<< HEAD
 // module.exports = requestHandler;
+=======
+
+module.exports.requestHandler = requestHandler;
+>>>>>>> 0f9dc7dfeae0df8213c8ecf4f4dd43e14eb21a5d
